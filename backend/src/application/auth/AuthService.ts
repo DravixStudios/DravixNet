@@ -1,10 +1,12 @@
 import type { AuthUser } from "@/domain/auth/AuthUser";
 import type { IAuthRepository } from "@/domain/auth/IAuthRepository";
+import type { IHashProvider } from "@/domain/auth/IHashProvider";
 import { EAuthErrorType, type AuthError } from "@/domain/auth/AuthError";
 
 export class AuthService {
     constructor(
-        private authRepository: IAuthRepository
+        private authRepository: IAuthRepository,
+        private hashProvider: IHashProvider
     ) {}
 
     async register(username: string, email: string, password: string): Promise<AuthUser | AuthError> {
@@ -22,9 +24,11 @@ export class AuthService {
             return err;
         }
 
-        const user: AuthUser = { username, email, password };
+        const hashedPassword = await this.hashProvider.hash(password, 12);
+
+        const user: AuthUser = { username, email, password: hashedPassword };
         const savedUser: AuthUser = await this.authRepository.save(user);
-        
+
         return savedUser;
     }
 }
