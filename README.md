@@ -10,4 +10,7 @@
 
 
 ## 🔹 License
-- Read [LICENSE file]('./LICENSE')
+- Read [LICENSE file](./LICENSE)
+
+## 🔹 License
+- Read [SECURITY.md](./SECURITY.md)
