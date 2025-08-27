@@ -1,3 +1,3 @@
 export interface ISecretProvider {
-    jwtSecret?: string | null;
+    tokenSecret?: string | null;
 }
