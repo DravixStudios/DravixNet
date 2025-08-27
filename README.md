@@ -9,8 +9,8 @@
 **DravixNet** is a proprietary online platform developed by **Dravix Studios**.  
 
 
-## 🔹 License
+## ⚖️ License
 - Read [LICENSE file](./LICENSE)
 
-## 🔹 License
+## ⚔️ SECURITY
 - Read [SECURITY.md](./SECURITY.md)
