@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx ./src/app.ts --watch"
+    "dev": "tsx ./src/infrastructure/http/server.ts --watch"
   },
   "author": "",
   "license": "ISC",

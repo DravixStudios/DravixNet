@@ -17,6 +17,7 @@
     "types": ["node"],
     // For nodejs:
     "lib": ["esnext"],
+    "allowSyntheticDefaultImports": true,
     // "types": ["node"],
     // and npm install -D @types/node
 
