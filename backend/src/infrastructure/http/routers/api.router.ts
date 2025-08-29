@@ -13,7 +13,7 @@ const router = Router();
 router.use('/auth', auth);
 
 router.use((req: Request, res: Response, next: NextFunction) => {
-    res.status(404).json(new ResponseBuilder(404).addError("The /api endpoint can't be get.").build());
+    res.status(404).json(new ResponseBuilder(404).addError("Not found").build());
 })
 
 export default router;
