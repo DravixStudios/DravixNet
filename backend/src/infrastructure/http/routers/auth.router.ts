@@ -5,9 +5,10 @@ import Router, {
 const router = Router();
 
 import { CheckRegisterBody } from '../middlewares/auth.middleware';
+import { AuthController } from '../controllers/auth.controller';
 
 
 router.route('/register')
-.post([CheckRegisterBody])
+.post([CheckRegisterBody, AuthController.register]);
 
 export default router;

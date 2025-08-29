@@ -6,7 +6,11 @@ import Router, {
 
 import { ResponseBuilder } from '@/infrastructure/ResponseBuilder';
 
+import auth from './auth.router';
+
 const router = Router();
+
+router.use('/auth', auth);
 
 router.use((req: Request, res: Response, next: NextFunction) => {
     res.status(404).json(new ResponseBuilder(404).addError("The /api endpoint can't be get.").build());
