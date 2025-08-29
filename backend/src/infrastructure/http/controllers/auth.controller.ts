@@ -47,4 +47,19 @@ export class AuthController {
 
         res.status(200).json(new ResponseBuilder(200).build());
     }
+
+    static async login(req: Request, res: Response) {
+        const { username, password } = req.body;
+
+        const token: string | AuthError = await auth.login(username, password);
+
+        if(typeof token != 'string') {
+            const err: AuthError = token as AuthError;
+            const code: number = ErrorToCode(err.type);
+
+            return res.status(code).json(new ResponseBuilder(code).addErrors(err.errors));
+        }
+
+        
+    }
 }
