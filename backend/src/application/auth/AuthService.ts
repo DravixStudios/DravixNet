@@ -20,8 +20,8 @@ export class AuthService {
             const err: AuthError = {
                 type: (bEmailExists ? EAuthErrorType.EmailExists : 0x00) | (bUsernameExists ? EAuthErrorType.UsernameExists : 0x00),
                 errors: [
-                    ...(bEmailExists ? "AuthError.EmailExists" : []),
-                    ...(bUsernameExists ? "AuthError.UsernameExists" : [])
+                    ...(bEmailExists ? ["User with that email already exists"] : []),
+                    ...(bUsernameExists ? ["User with that username already exists"] : [])
                 ]
             };
 
@@ -42,7 +42,7 @@ export class AuthService {
             const err: AuthError = {
                 type: EAuthErrorType.UserNotFound,
                 errors: [
-                    "AuthError.UserNotFound"
+                    "User not found"
                 ]
             };
 
@@ -55,9 +55,9 @@ export class AuthService {
 
         if(!bValidPassword) {
             const err: AuthError = {
-                type: EAuthErrorType.InvalidPassword,
+                type: EAuthErrorType.IncorrectPassword,
                 errors: [
-                    "AuthError.InvalidPassword"
+                    "Incorrect password"
                 ]
             };
 
@@ -70,7 +70,7 @@ export class AuthService {
             const err: AuthError = {
                 type: EAuthErrorType.UndefinedError,
                 errors: [
-                    "AuthError.UndefinedError"
+                    "Error not defined"
                 ]
             };
 
