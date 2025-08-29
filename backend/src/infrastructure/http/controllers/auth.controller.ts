@@ -19,15 +19,15 @@ const ErrorToCode = (type: EAuthErrorType): number => {
         return 409;
     }
 
-    if (type & EAuthErrorType.IncorrectPassword) {
+    if (type == EAuthErrorType.IncorrectPassword) {
         return 401;
     }
 
-    if (type & EAuthErrorType.UserNotFound) {
+    if (type == EAuthErrorType.UserNotFound) {
         return 404;
     }
 
-    if (type & EAuthErrorType.UndefinedError) {
+    if (type == EAuthErrorType.UndefinedError) {
         return 500;
     }
 
@@ -57,9 +57,9 @@ export class AuthController {
             const err: AuthError = token as AuthError;
             const code: number = ErrorToCode(err.type);
 
-            return res.status(code).json(new ResponseBuilder(code).addErrors(err.errors));
+            return res.status(code).json(new ResponseBuilder(code).addErrors(err.errors).build());
         }
 
-        
+        res.status(200).json(new ResponseBuilder(200).addData({token}).build());
     }
 }
