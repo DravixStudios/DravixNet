@@ -49,7 +49,7 @@ export class AuthService {
             return err;
         }
 
-        const user: AuthUser = await this.authRepository.findByUsername(username);
+        const user: AuthUser = (await this.authRepository.findByUsername(username))!;
 
         const bValidPassword: boolean = await this.hashProvider.compare(password, user.password);
 
