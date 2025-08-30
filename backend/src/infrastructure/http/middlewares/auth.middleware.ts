@@ -42,6 +42,18 @@ const CheckRegisterBody = async (req: Request, res: Response, next: NextFunction
     next();
 }
 
+const CheckLoginBody = async (req: Request, res: Response, next: NextFunction) => {
+    if(!req.body.username || !req.body.password) {
+        return res.status(400).json(new ResponseBuilder(400).addErrors([
+            !req.body.username && "Username not specified",
+            !req.body.password && "Password required"
+        ].filter((e): e is string => typeof e === 'string')).build());
+    }
+
+    next();
+}
+
 export { 
-    CheckRegisterBody
+    CheckRegisterBody,
+    CheckLoginBody
 }
