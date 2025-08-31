@@ -80,4 +80,21 @@ export class AuthService {
         const token: string = await this.tokenProvider.sign({username: user.username, steam_id: user.steam_id ? user.steam_id : 0}, tokenSecret);
         return token;
     }
+
+    async findByUsername(username: string): Promise<AuthUser | AuthError> {
+        const user: AuthUser | null = await this.authRepository.findByUsername(username);
+
+        if(!user) {
+            const err: AuthError = {
+                type: EAuthErrorType.UserNotFound,
+                errors: [
+                    "Username not found"
+                ]
+            };
+
+            return err;
+        }
+
+        return user;
+    }
 }
