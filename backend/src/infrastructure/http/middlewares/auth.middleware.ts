@@ -5,6 +5,9 @@ import {
 } from 'express';
 
 import { ResponseBuilder } from '@/infrastructure/ResponseBuilder';
+import type { ITokenProvider } from '@/domain/auth/ITokenProvider';
+import type { ISecretProvider } from '@/domain/ISecretProvider';
+import type { ITokenData } from '@/domain/auth/ITokenData';
 
 const CheckRegisterBody = async (req: Request, res: Response, next: NextFunction) => {
     if(!req.body.username || !req.body.email || !req.body.password) {
@@ -53,7 +56,31 @@ const CheckLoginBody = async (req: Request, res: Response, next: NextFunction) =
     next();
 }
 
+const VerifyToken = (tokenProvider: ITokenProvider, secretProvider: ISecretProvider) => async (req: Request, res: Response, next: NextFunction) => {
+    const auth = req.headers['authorization'];
+    if(!auth || auth.split(' ')[0]?.toLocaleLowerCase() != 'bearer' || !auth.split(' ')[1]) {
+        return res.status(400).json(new ResponseBuilder(400).addErrors([
+            !auth && 'No auth header',
+            auth?.split(' ')[0]?.toLocaleLowerCase() != 'bearer' && 'Token is not bearer',
+            !auth?.split(' ')[1] && 'No token provided'
+        ].filter((e): e is string => typeof e === 'string')).build())
+    }
+    
+    const token: string = auth.split(' ')[1]!;
+
+    const tokenData: ITokenData | null = await tokenProvider.verify(token, secretProvider.tokenSecret!);
+    if(!tokenData) {
+        return res.status(401).json(
+            new ResponseBuilder(401).addError('Invalid token provided').build()
+        );
+    }
+
+    res.locals.tokenData = tokenData;
+    next();
+}
+
 export { 
     CheckRegisterBody,
-    CheckLoginBody
+    CheckLoginBody,
+    VerifyToken
 }

@@ -1,6 +1,6 @@
 import type { ITokenData } from "@/domain/auth/ITokenData";
 import type { ITokenProvider } from "@/domain/auth/ITokenProvider";
-import jwt, { type JwtPayload, type VerifyErrors } from 'jsonwebtoken';
+import jwt, { type JwtPayload } from 'jsonwebtoken';
 
 interface JwtTokenData extends JwtPayload {
     username: string;
