@@ -11,6 +11,7 @@ import { EnvAdapter } from "@/infrastructure/EnvAdapter";
 import type { AuthUser } from '@/domain/auth/AuthUser';
 import { EAuthErrorType, type AuthError } from '@/domain/auth/AuthError';
 import { ResponseBuilder } from '@/infrastructure/ResponseBuilder';
+import type { ITokenData } from '@/domain/auth/ITokenData';
 
 const auth = new AuthService(PrismaAuthRepository, BcryptAdapter, JwtAdapter, EnvAdapter);
 
@@ -61,5 +62,22 @@ export class AuthController {
         }
 
         res.status(200).json(new ResponseBuilder(200).addData({token}).build());
+    }
+
+    static async getMe(req: Request, res: Response) {
+        const tokenData: ITokenData = res.locals.tokenData;
+
+        const user: AuthUser | AuthError = await auth.findByUsername(tokenData.username);
+
+        if('errors' in user) {
+            const err: AuthError = user as AuthError;
+            const code: number = ErrorToCode(err.type);
+
+            return res.status(code).json(new ResponseBuilder(code).addErrors(err.errors).build());
+        }
+
+        const {password, ...sanitizedUser} = user;
+
+        res.status(200).json(new ResponseBuilder(200).addData(sanitizedUser).build());
     }
 }

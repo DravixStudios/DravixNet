@@ -4,8 +4,12 @@ import Router, {
 } from 'express';
 const router = Router();
 
-import { CheckRegisterBody, CheckLoginBody } from '../middlewares/auth.middleware';
+import { CheckRegisterBody, CheckLoginBody, VerifyToken } from '../middlewares/auth.middleware';
 import { AuthController } from '../controllers/auth.controller';
+import { JwtAdapter } from '@/infrastructure/auth/JwtAdapter';
+import { EnvAdapter } from '@/infrastructure/EnvAdapter';
+
+const verifyToken = VerifyToken(JwtAdapter, EnvAdapter);
 
 
 router.route('/register')
@@ -13,5 +17,8 @@ router.route('/register')
 
 router.route('/login')
 .post([CheckLoginBody, AuthController.login]);
+
+router.route('/me')
+.get([verifyToken, AuthController.getMe]);
 
 export default router;
